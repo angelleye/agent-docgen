@@ -1,0 +1,53 @@
+# Laravel specific
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# PhpStorm specific
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+atlassian-ide-plugin.xml
+
+# Laravel Mix
+/public/css
+/public/js
+/public/mix-manifest.json
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Composer
+composer.phar
+
+# Build files
+/build/
+
+# Package managers
+package-lock.json
+yarn.lock
+
+# Testing and coverage reports
+/coverage/
+.phpunit.cache/
+/temp
+/tmp
+
+# Local development configurations
+docker-compose.override.yml
+
+# Deployment artifacts
+/.vagrant
+.env.production
