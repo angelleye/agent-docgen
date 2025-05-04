@@ -1,18 +1,53 @@
-# Laravel specific
-/node_modules
+# ========================================
+# ⚙️ Laravel Framework
+# ========================================
+/vendor/
+/node_modules/
 /public/hot
 /public/storage
+/public/build
 /storage/*.key
-/vendor
+/storage/pail
 .env
+.env.example
 .env.backup
+.env.production
+.env.sandbox
 .phpunit.result.cache
+.phpunit.cache/
+/.phpunit.cache
+/.phpunit.cache
 Homestead.json
 Homestead.yaml
+
+# ========================================
+# 🧪 Testing & Coverage
+# ========================================
+/coverage/
+/temp
+/tmp
+
+# ========================================
+# 📦 Build Artifacts
+# ========================================
+/build/
+/public/css
+/public/js
+/public/mix-manifest.json
+
+# ========================================
+# 🧰 Package Managers
+# ========================================
+composer.phar
+package-lock.json
+yarn.lock
 npm-debug.log
 yarn-error.log
 
-# PhpStorm specific
+# ========================================
+# 💻 IDEs & Editor Settings
+# ========================================
+# PhpStorm / JetBrains
 .idea/
 *.iml
 *.iws
@@ -20,34 +55,30 @@ yarn-error.log
 .idea_modules/
 atlassian-ide-plugin.xml
 
-# Laravel Mix
-/public/css
-/public/js
-/public/mix-manifest.json
+# VSCode
+.vscode/
 
-# OS specific
+# Nova
+.nova/
+
+# Fleet
+.fleet/
+
+# Zed
+.zed/
+
+# PHP tools
+.phpactor.json
+/auth.json
+
+# ========================================
+# 🖥️ OS Files
+# ========================================
 .DS_Store
 Thumbs.db
 
-# Composer
-composer.phar
-
-# Build files
-/build/
-
-# Package managers
-package-lock.json
-yarn.lock
-
-# Testing and coverage reports
-/coverage/
-.phpunit.cache/
-/temp
-/tmp
-
-# Local development configurations
+# ========================================
+# 🐳 Local Dev & Deployment
+# ========================================
 docker-compose.override.yml
-
-# Deployment artifacts
 /.vagrant
-.env.production
