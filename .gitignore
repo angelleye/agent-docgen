@@ -13,6 +13,7 @@
 .env.backup
 .env.production
 .env.sandbox
+.env.localhost
 .phpunit.result.cache
 .phpunit.cache/
 /.phpunit.cache
