@@ -18,3 +18,31 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+/**
+ * Socialite
+ */
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Str;
+
+Route::get('/login/github', function () {
+    return Socialite::driver('github')->redirect();
+});
+
+Route::get('/login/github/callback', function () {
+    $githubUser = Socialite::driver('github')->user();
+
+    $user = User::updateOrCreate(
+        ['email' => $githubUser->getEmail()],
+        [
+            'name' => $githubUser->getName() ?? $githubUser->getNickname(),
+            'password' => bcrypt(Str::random(24)), // random password since they're using social
+        ]
+    );
+
+    Auth::login($user, true);
+
+    return redirect('/dashboard');
+});
