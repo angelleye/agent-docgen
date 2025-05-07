@@ -46,5 +46,5 @@ Route::get('/login/github/callback', function () {
 
     Auth::login($user, true);
 
-    return redirect('/dashboard');
+    return redirect()->intended('/dashboard');
 });
