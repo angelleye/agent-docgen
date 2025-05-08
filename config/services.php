@@ -47,5 +47,11 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
+    'jira' => [
+        'client_id' => env('JIRA_CLIENT_ID'),
+        'client_secret' => env('JIRA_CLIENT_SECRET'),
+        'redirect_uri' => env('JIRA_REDIRECT_URI'),
+    ],
+
 
 ];

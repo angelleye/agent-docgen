@@ -3,6 +3,7 @@
 use App\Http\Controllers\IntegrationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JiraController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -13,15 +14,19 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    #Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/integrations', [IntegrationController::class, 'index'])->name('integrations.index');
-    Route::get('/integrations/jira/connect', function () {
-        return '🔧 This is where Jira OAuth will begin.';
-    })->name('jira.connect');
 
+    #Integration Routes
+    Route::get('/integrations', [IntegrationController::class, 'index'])->name('integrations.index');
+
+    // Jira OAuth Routes
+    Route::get('/jira/connect', [JiraController::class, 'redirectToJira'])->name('jira.connect');
+    Route::get('/jira/callback', [JiraController::class, 'handleJiraCallback'])->name('jira.callback');
 });
+
 
 require __DIR__.'/auth.php';
 
