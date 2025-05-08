@@ -21,8 +21,9 @@ Route::middleware('auth')->group(function () {
 
     #Integration Routes
     Route::get('/integrations', [IntegrationController::class, 'index'])->name('integrations.index');
+    Route::post('/integrations/jira/disconnect', [JiraController::class, 'disconnect'])->name('jira.disconnect');
 
-    // Jira OAuth Routes
+    // Jira Routes
     Route::get('/jira/connect', [JiraController::class, 'redirectToJira'])->name('jira.connect');
     Route::get('/jira/callback', [JiraController::class, 'handleJiraCallback'])->name('jira.callback');
 });

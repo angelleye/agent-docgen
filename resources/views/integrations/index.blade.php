@@ -21,8 +21,16 @@
                     <div class="inline-flex items-center bg-green-100 text-green-800 text-sm font-medium px-4 py-2 rounded-full">
                         ✅ Connected to Jira
                     </div>
+                    <form method="POST" action="{{ route('jira.disconnect') }}">
+                        @csrf
+                        <button type="submit"
+                                class="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition">
+                            🔌 Disconnect Jira
+                        </button>
+                    </form>
+
                 @else
-                    <a href="{{ route('jira.connect') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition">
+                    <a href="{{ route('jira.connect') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-black text-sm font-semibold rounded-lg hover:bg-indigo-700 transition">
                         🔗 Connect with Jira
                     </a>
                 @endif

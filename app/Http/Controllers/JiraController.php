@@ -73,4 +73,14 @@ class JiraController extends Controller
 
         return redirect()->route('integrations.index')->with('success', '✅ Connected to Jira successfully.');
     }
+
+    public function disconnect(Request $request)
+    {
+        Integration::where('user_id', Auth::id())
+            ->where('provider', 'jira')
+            ->delete();
+
+        return redirect()->route('integrations.index')->with('success', '🔌 Jira disconnected successfully.');
+    }
+
 }
