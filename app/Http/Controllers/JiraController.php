@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\Integration;
 use Illuminate\Http\Request;
-use App\Services\JiraService;
 
 class JiraController extends Controller
 {
@@ -42,8 +42,7 @@ class JiraController extends Controller
             return redirect()->route('integrations.index')->with('error', 'Authorization code missing.');
         }
 
-        // Exchange code for access token
-        $response = Http::asForm()->post('https://auth.atlassian.com/oauth/token', [
+        $tokenResponse = Http::asForm()->post('https://auth.atlassian.com/oauth/token', [
             'grant_type' => 'authorization_code',
             'client_id' => config('services.jira.client_id'),
             'client_secret' => config('services.jira.client_secret'),
@@ -51,25 +50,44 @@ class JiraController extends Controller
             'redirect_uri' => config('services.jira.redirect_uri'),
         ]);
 
-        if ($response->failed()) {
+        if ($tokenResponse->failed()) {
             return redirect()->route('integrations.index')->with('error', 'Failed to connect to Jira.');
         }
 
-        $data = $response->json();
+        $tokenData = $tokenResponse->json();
 
-        // Save or update integration
+        // Fetch Jira cloud site info using access token
+        $resourceResponse = Http::withToken($tokenData['access_token'])
+            ->get('https://api.atlassian.com/oauth/token/accessible-resources');
+
+        if ($resourceResponse->failed()) {
+            return redirect()->route('integrations.index')->with('error', 'Failed to fetch Jira site information.');
+        }
+
+        $cloudSite = $resourceResponse->json()[0] ?? null;
+
+        if (!$cloudSite) {
+            return redirect()->route('integrations.index')->with('error', 'No accessible Jira site found.');
+        }
+
         Integration::updateOrCreate(
             [
                 'user_id' => Auth::id(),
                 'provider' => 'jira',
             ],
             [
-                'access_token' => $data['access_token'],
-                'refresh_token' => $data['refresh_token'] ?? null,
-                'token_type' => $data['token_type'] ?? 'Bearer',
-                'scope' => $data['scope'] ?? null,
-                'expires_at' => now()->addSeconds($data['expires_in'] ?? 3600),
-                'metadata' => [],
+                'access_token' => $tokenData['access_token'],
+                'refresh_token' => $tokenData['refresh_token'] ?? null,
+                'token_type' => $tokenData['token_type'] ?? 'Bearer',
+                'scope' => $tokenData['scope'] ?? null,
+                'expires_at' => now()->addSeconds($tokenData['expires_in'] ?? 3600),
+                'external_id' => $cloudSite['id'],
+                'metadata' => [
+                    'name' => $cloudSite['name'],
+                    'url' => $cloudSite['url'],
+                    'avatarUrl' => $cloudSite['avatarUrl'],
+                    'scopes' => $cloudSite['scopes'],
+                ],
             ]
         );
 
@@ -84,5 +102,4 @@ class JiraController extends Controller
 
         return redirect()->route('integrations.index')->with('success', '🔌 Jira disconnected successfully.');
     }
-
 }

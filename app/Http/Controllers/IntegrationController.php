@@ -10,9 +10,12 @@ class IntegrationController extends Controller
 {
     public function index()
     {
-        $jiraConnected = Integration::where('user_id', Auth::id())
+        $jira = Integration::where('user_id', Auth::id())
             ->where('provider', 'jira')
-            ->exists();
+            ->first();
 
-        return view('integrations.index', compact('jiraConnected'));
-    }}
+        $jiraConnected = $jira !== null;
+
+        return view('integrations.index', compact('jiraConnected', 'jira'));
+    }
+}

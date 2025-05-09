@@ -17,20 +17,26 @@
                     Integrate your Jira account to pull in Service Management ticket history and generate intelligent documentation.
                 </p>
 
-                @if ($jiraConnected)
-                    <div class="inline-flex items-center bg-green-100 text-green-800 text-sm font-medium px-4 py-2 rounded-full">
-                        ✅ Connected to Jira
+                @if ($jiraConnected && isset($jira->metadata['name'], $jira->metadata['url']))
+                    <div class="bg-green-100 text-green-800 text-sm font-medium px-4 py-2 rounded-full inline-block">
+                        ✅ Connected to <strong>{{ $jira->metadata['name'] }}</strong>
                     </div>
+                    <p class="text-sm text-gray-600">
+                        <a href="{{ $jira->metadata['url'] }}" class="text-blue-600 hover:underline" target="_blank">
+                            🌐 Visit Jira site ↗
+                        </a>
+                    </p>
+
                     <form method="POST" action="{{ route('jira.disconnect') }}">
                         @csrf
                         <button type="submit"
-                                class="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition">
+                                class="inline-flex items-center px-4 py-2 mt-3 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition">
                             🔌 Disconnect Jira
                         </button>
                     </form>
-
                 @else
-                    <a href="{{ route('jira.connect') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-black text-sm font-semibold rounded-lg hover:bg-indigo-700 transition">
+                    <a href="{{ route('jira.connect') }}"
+                       class="inline-flex items-center px-4 py-2 bg-indigo-600 text-black text-sm font-semibold rounded-lg hover:bg-indigo-700 transition">
                         🔗 Connect with Jira
                     </a>
                 @endif
