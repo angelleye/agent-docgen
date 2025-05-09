@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\Integration;
 use Illuminate\Http\Request;
+use App\Services\JiraService;
 
 class JiraController extends Controller
 {
@@ -14,6 +15,7 @@ class JiraController extends Controller
         $redirectUri = urlencode(config('services.jira.redirect_uri'));
 
         $scopes = implode(' ', [
+            'offline_access',
             'read:jira-user',
             'read:jira-work',
             'read:me',
