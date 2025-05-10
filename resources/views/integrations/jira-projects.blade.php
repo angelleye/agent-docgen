@@ -16,13 +16,22 @@
                     @csrf
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {{-- Select All Option --}}
+                        <div class="col-span-2">
+                            <label class="flex items-center space-x-2 font-medium text-gray-800">
+                                <input type="checkbox" id="select-all" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                                <span>Select All Projects</span>
+                            </label>
+                        </div>
+
+                        {{-- Individual Projects --}}
                         @foreach ($projects as $project)
                             <label class="flex items-center space-x-2">
                                 <input
                                     type="checkbox"
                                     name="projects[]"
                                     value="{{ $project['key'] }}"
-                                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                                    class="project-checkbox rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
                                     {{ in_array($project['key'], $selectedProjectKeys) ? 'checked' : '' }}
                                 >
                                 <span>{{ $project['name'] }} ({{ $project['key'] }})</span>
@@ -41,7 +50,20 @@
                         </a>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectAllCheckbox = document.getElementById('select-all');
+            const checkboxes = document.querySelectorAll('.project-checkbox');
+
+            selectAllCheckbox.addEventListener('change', function () {
+                checkboxes.forEach(cb => cb.checked = this.checked);
+            });
+        });
+    </script>
+@endpush
 </x-app-layout>
