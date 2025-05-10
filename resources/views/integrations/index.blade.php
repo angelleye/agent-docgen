@@ -27,6 +27,14 @@
                         </a>
                     </p>
 
+                    <p class="text-sm text-gray-600 mt-2">
+                        <a href="{{ route('jira.projects') }}"
+                           class="inline-flex items-center px-4 py-2 bg-indigo-500 text-black text-sm font-semibold rounded-lg hover:bg-indigo-600 transition">
+                            🧩 Manage Projects
+                        </a>
+                    </p>
+
+
                     <form method="POST" action="{{ route('jira.disconnect') }}">
                         @csrf
                         <button type="submit"
