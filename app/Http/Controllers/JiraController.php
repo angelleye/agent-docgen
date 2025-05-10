@@ -132,4 +132,28 @@ class JiraController extends Controller
         ]);
     }
 
+    public function saveSelectedProjects(Request $request)
+    {
+        $user = Auth::user();
+
+        $integration = $user->integrations->firstWhere('provider', 'jira');
+
+        if (!$integration) {
+            return redirect()->route('integrations.index')->with('error', 'Jira is not connected.');
+        }
+
+        $selectedProjects = $request->input('projects', []);
+
+        // Save selected projects into metadata JSON
+        $metadata = $integration->metadata ?? [];
+        $metadata['selected_projects'] = $selectedProjects;
+
+        $integration->update([
+            'metadata' => $metadata,
+        ]);
+
+        return redirect()->route('integrations.index')->with('success', '✅ Project selection saved.');
+    }
+
+
 }
