@@ -34,6 +34,15 @@
                         </a>
                     </p>
 
+                    <form method="POST" action="{{ route('jira.fetch.tickets') }}" class="mt-2">
+                        @csrf
+                        <button type="submit"
+                                class="inline-flex items-center px-4 py-2 bg-blue-600 text-black text-sm font-semibold rounded-lg hover:bg-blue-700 transition">
+                            📥 Fetch Tickets
+                        </button>
+                    </form>
+
+
 
                     <form method="POST" action="{{ route('jira.disconnect') }}">
                         @csrf
