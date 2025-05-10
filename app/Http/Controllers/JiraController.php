@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\Integration;
 use Illuminate\Http\Request;
+use App\Services\JiraService;
 
 class JiraController extends Controller
 {
@@ -102,4 +103,33 @@ class JiraController extends Controller
 
         return redirect()->route('integrations.index')->with('success', '🔌 Jira disconnected successfully.');
     }
+
+    public function showProjectSelector(JiraService $jiraService)
+    {
+        $user = Auth::user();
+        $integration = $user->integrations->firstWhere('provider', 'jira');
+
+        if (!$integration) {
+            return redirect()->route('integrations.index')->with('error', 'Jira is not connected.');
+        }
+
+        $accessToken = $jiraService->getAccessToken();
+
+        $cloudId = $integration->external_id;
+        $url = "https://api.atlassian.com/ex/jira/{$cloudId}/rest/api/3/project/search";
+
+        $response = Http::withToken($accessToken)->get($url);
+
+        if ($response->failed()) {
+            return redirect()->route('integrations.index')->with('error', 'Failed to fetch Jira projects.');
+        }
+
+        $projects = $response->json('values');
+
+        return view('integrations.jira-projects', [
+            'projects' => $projects,
+            'selectedProjectKeys' => $integration->metadata['selected_projects'] ?? [],
+        ]);
+    }
+
 }

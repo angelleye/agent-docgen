@@ -26,6 +26,10 @@ Route::middleware('auth')->group(function () {
     // Jira Routes
     Route::get('/jira/connect', [JiraController::class, 'redirectToJira'])->name('jira.connect');
     Route::get('/jira/callback', [JiraController::class, 'handleJiraCallback'])->name('jira.callback');
+
+    Route::get('/integrations/jira/projects', [JiraController::class, 'showProjectSelector'])->name('jira.projects');
+    Route::post('/integrations/jira/projects', [JiraController::class, 'saveSelectedProjects'])->name('jira.projects.save');
+
 });
 
 

@@ -45,4 +45,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function integrations()
+    {
+        return $this->hasMany(\App\Models\Integration::class);
+    }
+
 }
